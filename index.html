@@ -18,59 +18,70 @@ body {
   height: 100%;
   overflow-y: auto;
 }
+#rows {
+  position: relative;
+}
+#rows::before {
+  content: "";
 
+  position: absolute;
+
+  top: 0;
+  bottom: 0;
+
+  left: 50%;
+
+  width: 2px;
+
+  background: #ddd;
+
+  transform: translateX(-50%);
+}
 .row {
   display: grid;
   grid-template-columns: 50% 50%;
   padding: 5px 10px;
 }
 
-#right {
-  padding: 10px;
-}
-
-.spacer {
-  width: 100%;
-}
-
-.dropzone {
-  margin-top: 8px;
-  padding: 10px;
-  border: 2px dashed #ccc;
-  border-radius: 6px;
-  text-align: center;
-  font-size: 12px;
-  color: #777;
-  transition: 0.2s;
-}
-
-.dropzone.dragover {
-  background: #eef5ff;
-  border-color: #007bff;
-}
-
 #upload {
   position: sticky;
   top: 0;
-  background: white;
-  z-index: 10;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 10px;
-  border-bottom: 1px solid #ccc;
+  background: white;
+  border-bottom: 1px solid #ddd;
+}
+
+#highlightBtn {
+
+  border: none;
+  border-radius: 8px;
+
+  padding: 8px 14px;
+
+  background: #111;
+  color: white;
+
+  cursor: pointer;
+
+  transition: 0.15s;
+}
+#highlightBtn:disabled {
+
+  opacity: 0.3;
+  cursor: default;
+}
+#highlightBtn:hover:not(:disabled) {
+
+  transform: scale(1.03);
 }
 
 .highlight {
-  background: yellow;
-}
-#floatingHighlight {
-  position: absolute;
-  display: none;
-  z-index: 1000;
-  padding: 5px 10px;
-  background: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  background: rgba(255, 230, 120, 0.45);
+  border-radius: 3px;
 }
 
 .comment {
@@ -112,14 +123,13 @@ body {
 }
 
 .comment-toolbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
 
-  padding: 4px 8px;
-
-  background: #f5f5f5;
-  border-bottom: 1px solid #ddd;
+.comment:hover .comment-toolbar,
+.comment:focus-within .comment-toolbar {
+  opacity: 1;
 }
 
 .comment-toolbar button,
@@ -133,7 +143,8 @@ body {
 .comment textarea {
   width: 100%;
   border: none;
-  resize: vertical;
+  resize: none;
+  overflow: hidden;
   padding: 10px;
   box-sizing: border-box;
   font-family: inherit;
@@ -141,15 +152,43 @@ body {
   background: transparent;
 }
 
-.proposal-textarea {
-  min-height: 80px;
-}
-
+.proposal-textarea,
 .justification-textarea {
-  min-height: 60px;
+  min-height: 35px;
 }
 
-.comment img,
+textarea:focus,
+button:focus,
+label:focus,
+input:focus {
+
+  outline: none;
+  box-shadow: none;
+}
+
+.comment img {
+
+  width: 100%;
+
+  max-height: 120px;
+
+  object-fit: cover;
+
+  cursor: zoom-in;
+
+  transition:
+    max-height 0.25s ease,
+    transform 0.25s ease;
+}
+.comment img:hover {
+
+  max-height: 600px;
+
+  transform: scale(1.02);
+
+  z-index: 5;
+}
+
 .comment audio {
   width: 100%;
   display: block;
@@ -157,32 +196,11 @@ body {
 
 .hidden-input {
   display: none;
-}
-
-.comment textarea {
-  width: 100%;
-  min-height: 80px;
-  border: none;
-  resize: vertical;
-  padding: 10px;
-  box-sizing: border-box;
-}
-.comment img,
-.comment audio {
-  width: 100%;
-  display: block;
-}
-
-.hidden-input {
-  display: none;
-}
-
-img, audio {
-  max-width: 100%;
 }
 
 .linked-hover {
-  outline: 2px solid orange;
+  background: rgba(255, 230, 120, 0.25);
+  transition: 0.15s;
   background: #fff3cd;
 }
 </style>
@@ -193,19 +211,17 @@ img, audio {
 <div id="container">
   <div id="upload">
     <input type="file" id="fileInput" accept=".md">
+    <button id="highlightBtn" disabled>🖍️ Surligner</button>
   </div>
 
   <div id="rows"></div>
-
-  <button id="floatingHighlight">🖍️</button>
 </div>
 
 <script>
 
-let annotations = [];
-let currentRange = null;
-
-document.addEventListener("dragover", e => e.preventDefault());
+  document.addEventListener("dragover", e => e.preventDefault());
+  const highlightBtn =
+  document.getElementById("highlightBtn");
 
 document.addEventListener("drop", e => {
   e.preventDefault();
@@ -294,8 +310,7 @@ function renderMD(md) {
 
     const proposalTextarea = document.createElement("textarea");
     proposalTextarea.className = "proposal-textarea";
-    proposalTextarea.placeholder =
-      "Proposition scénique...";
+    proposalTextarea.placeholder = "Proposition scénique...";
 
     let hasText = false;
     let hasMedia = false;
@@ -391,7 +406,6 @@ function renderMD(md) {
 
       div.remove();
 
-      annotations = annotations.filter(a => a.div !== div);
     };
     const justificationBubble = document.createElement("div");
     justificationBubble.className =
@@ -409,6 +423,20 @@ function renderMD(md) {
     justificationBubble.appendChild(
       justificationTextarea
     );
+
+    proposalTextarea.addEventListener("input", () => {
+      autoResizeTextarea(proposalTextarea);
+    });
+
+    justificationTextarea.addEventListener("input", () => {
+      autoResizeTextarea(justificationTextarea);
+    });
+
+    proposalTextarea.rows = 1;
+    justificationTextarea.rows = 1;
+
+    autoResizeTextarea(proposalTextarea);
+    autoResizeTextarea(justificationTextarea);
 
     function activate() {
 
@@ -444,15 +472,19 @@ function renderMD(md) {
     proposalBubble.appendChild(toolbar);
     proposalBubble.appendChild(proposalTextarea);
 
+    proposalTextarea.spellcheck = false;
+    justificationTextarea.spellcheck = false;
+
     div.appendChild(proposalBubble);
     div.appendChild(justificationBubble);
+
+    proposalTextarea.rows = 1;
+    justificationTextarea.rows = 1;
 
     const row = el.closest(".row");
     const slot = row.querySelector(".comment-slot");
 
     slot.appendChild(div);
-
-    annotations.push({ el, div });
 
     return div;
   }
@@ -467,44 +499,97 @@ function renderMD(md) {
     parent.removeChild(el);
   }
 
+  function autoResizeTextarea(textarea) {
 
+    textarea.style.height = "auto";
 
-const floatingBtn = document.getElementById("floatingHighlight");
-
-let currentSelectionRange = null;
-
-document.addEventListener("mouseup", () => {
-  const sel = window.getSelection();
-
-  if (sel.isCollapsed) {
-    floatingBtn.style.display = "none";
-    return;
+    textarea.style.height =
+      textarea.scrollHeight + "px";
   }
 
-  const range = sel.getRangeAt(0);
-  const rect = range.getBoundingClientRect();
+  let currentSelectionRange = null;
 
-  currentSelectionRange = range;
+  document.addEventListener("mouseup", () => {
 
-  floatingBtn.style.top = (window.scrollY + rect.top - 40) + "px";
-  floatingBtn.style.left = (rect.left) + "px";
-  floatingBtn.style.display = "block";
-});
+    const sel = window.getSelection();
 
-floatingBtn.onclick = () => {
+    if (
+      sel.isCollapsed ||
+      !sel.toString().trim()
+    ) {
 
-  if (!currentSelectionRange) return;
+      currentSelectionRange = null;
 
-  const span = document.createElement("span");
-  span.className = "highlight";
+      highlightBtn.disabled = true;
 
-  currentSelectionRange.surroundContents(span);
+      return;
+    }
 
-  createComment(span);
+    const range = sel.getRangeAt(0);
 
-  window.getSelection().removeAllRanges();
-  floatingBtn.style.display = "none";
-};
+    const row =
+      range.commonAncestorContainer
+        .parentElement
+        ?.closest(".row");
+
+    if (!row) {
+
+      currentSelectionRange = null;
+
+      highlightBtn.disabled = true;
+
+      return;
+    }
+
+    const parentHighlight =
+      range.commonAncestorContainer
+        .parentElement
+        ?.closest(".highlight");
+
+    if (parentHighlight) {
+
+      highlightBtn.disabled = true;
+
+      return;
+    }
+
+    currentSelectionRange = range;
+
+    highlightBtn.disabled = false;
+  });
+
+  highlightBtn.onclick = () => {
+
+    if (!currentSelectionRange) return;
+
+    const span = document.createElement("span");
+
+    span.className = "highlight";
+
+    currentSelectionRange.surroundContents(span);
+
+    createComment(span);
+
+    window.getSelection().removeAllRanges();
+
+    currentSelectionRange = null;
+
+    highlightBtn.disabled = true;
+  };
+
+  floatingBtn.onclick = () => {
+
+    if (!currentSelectionRange) return;
+
+    const span = document.createElement("span");
+    span.className = "highlight";
+
+    currentSelectionRange.surroundContents(span);
+
+    createComment(span);
+
+    window.getSelection().removeAllRanges();
+  };
 </script>
 </body>
 </html>

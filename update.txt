@@ -1,0 +1,8 @@
+❌ - Faire en sorte que les textarea des commentaires, à la fois pour le texte et la justification soient proportionnels au nombre de lignes écrites, qu'il ne prennent pas ni trop peut ni pas assez de place (au début : une seule ligne). Cela veut dire une suppression totale des lignes en bas à droite qui permettent de l'étirer.
+✅ - Faire une ligne centrale qui sépare le texte théâtral des commentaires
+❌ - faire en sorte que l'audio soit chargé comme celui d'un réseau social avec la waveform en traits verticaux
+✅ - Faire en sorte que l'image soit réduite en hauteur (peut-être avec une icone template filler) quand l'on ne met pas la souris dessus (animation d'aggrandissement)
+✅ - Pas de correction de l'orthographe dans les textarea
+❌ - mettre le bouton flottant highligh bien au coin au droit du texte sélectionné, parfois il est out à gauche et pas sélectionnable
+✅ - enlever les bords colorés quand on sélectionne l'intérieur d'une bulle de commentaire
+❌ - petite shadowbox sur les bulles ?
