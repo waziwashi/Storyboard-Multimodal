@@ -56,17 +56,12 @@ body {
 }
 
 #highlightBtn {
-
   border: none;
   border-radius: 8px;
-
   padding: 8px 14px;
-
   background: #111;
   color: white;
-
   cursor: pointer;
-
   transition: 0.15s;
 }
 #highlightBtn:disabled {
@@ -94,21 +89,19 @@ body {
 .proposal-bubble {
   position: relative;
   background: white;
-  border-radius: 16px;
+  border-radius: 16px 16px 16px 0;
+  box-shadow: 5px 5px 5px black;
   padding: 0;
   border: 1px solid #ddd;
   overflow: hidden;
 }
-
 .proposal-bubble::after {
   content: "";
   position: absolute;
   left: -10px;
   top: 20px;
-
   width: 0;
   height: 0;
-
   border-top: 10px solid transparent;
   border-bottom: 10px solid transparent;
   border-right: 10px solid white;
@@ -117,7 +110,8 @@ body {
 .justification-bubble {
   position: relative;
   background: #eef5ff;
-  border-radius: 16px;
+  border-radius: 16px 16px 0 16px;
+  box-shadow: 5px 5px 5px black;
   padding: 12px;
   margin-left: 40px;
 }
