@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Storyboard Multimodal</title>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<link rel="icon" type="image/png" href="icon.png">
+
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+  font-family: Arial;
+}
+
+#container {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  padding: 5px 10px;
+}
+
+#right {
+  padding: 10px;
+}
+
+.spacer {
+  width: 100%;
+}
+
+.dropzone {
+  margin-top: 8px;
+  padding: 10px;
+  border: 2px dashed #ccc;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 12px;
+  color: #777;
+  transition: 0.2s;
+}
+
+.dropzone.dragover {
+  background: #eef5ff;
+  border-color: #007bff;
+}
+
+#upload {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 10;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.highlight {
+  background: yellow;
+}
+#floatingHighlight {
+  position: absolute;
+  display: none;
+  z-index: 1000;
+  padding: 5px 10px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.comment {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.proposal-bubble {
+  position: relative;
+  background: white;
+  border-radius: 16px;
+  padding: 0;
+  border: 1px solid #ddd;
+  overflow: hidden;
+}
+
+.proposal-bubble::after {
+  content: "";
+  position: absolute;
+  left: -10px;
+  top: 20px;
+
+  width: 0;
+  height: 0;
+
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right: 10px solid white;
+}
+
+.justification-bubble {
+  position: relative;
+  background: #eef5ff;
+  border-radius: 16px;
+  padding: 12px;
+  margin-left: 40px;
+}
+
+.comment-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 4px 8px;
+
+  background: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}
+
+.comment-toolbar button,
+.comment-toolbar label {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.comment textarea {
+  width: 100%;
+  border: none;
+  resize: vertical;
+  padding: 10px;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: 14px;
+  background: transparent;
+}
+
+.proposal-textarea {
+  min-height: 80px;
+}
+
+.justification-textarea {
+  min-height: 60px;
+}
+
+.comment img,
+.comment audio {
+  width: 100%;
+  display: block;
+}
+
+.hidden-input {
+  display: none;
+}
+
+.comment textarea {
+  width: 100%;
+  min-height: 80px;
+  border: none;
+  resize: vertical;
+  padding: 10px;
+  box-sizing: border-box;
+}
+.comment img,
+.comment audio {
+  width: 100%;
+  display: block;
+}
+
+.hidden-input {
+  display: none;
+}
+
+img, audio {
+  max-width: 100%;
+}
+
+.linked-hover {
+  outline: 2px solid orange;
+  background: #fff3cd;
+}
+</style>
+</head>
+
+<body>
+
+<div id="container">
+  <div id="upload">
+    <input type="file" id="fileInput" accept=".md">
+  </div>
+
+  <div id="rows"></div>
+
+  <button id="floatingHighlight">🖍️</button>
+</div>
+
+<script>
+
+let annotations = [];
+let currentRange = null;
+
+document.addEventListener("dragover", e => e.preventDefault());
+
+document.addEventListener("drop", e => {
+  e.preventDefault();
+  loadMD(e.dataTransfer.files[0]);
+});
+document.getElementById("fileInput")
+  .addEventListener("change", e => {
+
+    const file = e.target.files[0];
+
+    if (!file) return;
+
+    loadMD(file);
+});
+
+function loadMD(file) {
+
+  const reader = new FileReader();
+
+  reader.onload = e => {
+
+    const md = e.target.result;
+
+    renderMD(md);
+  };
+  reader.readAsText(file);
+}
+
+marked.setOptions({
+  breaks: true
+});
+function renderMD(md) {
+
+  const rowsContainer = document.getElementById("rows");
+
+  rowsContainer.innerHTML = "";
+
+  const lines = md.split("\n");
+
+  lines.forEach((line, i) => {
+
+    const row = document.createElement("div");
+    row.className = "row";
+
+    const text = document.createElement("div");
+    text.className = "text";
+
+    text.innerHTML = marked.parseInline(line || " ");
+
+    const commentSlot = document.createElement("div");
+    commentSlot.className = "comment-slot";
+
+    row.appendChild(text);
+    row.appendChild(commentSlot);
+
+    rowsContainer.appendChild(row);
+  });
+}
+
+  function createComment(el) {
+
+    const div = document.createElement("div");
+    div.className = "comment";
+
+    const proposalBubble = document.createElement("div");
+    proposalBubble.className = "proposal-bubble";
+
+    const toolbar = document.createElement("div");
+    toolbar.className = "comment-toolbar";
+
+    const uploadLabel = document.createElement("label");
+    uploadLabel.textContent = "📂";
+
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = "image/*,audio/*";
+    fileInput.className = "hidden-input";
+
+    uploadLabel.appendChild(fileInput);
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "🗑️";
+
+    toolbar.appendChild(uploadLabel);
+    toolbar.appendChild(deleteBtn);
+
+    const proposalTextarea = document.createElement("textarea");
+    proposalTextarea.className = "proposal-textarea";
+    proposalTextarea.placeholder =
+      "Proposition scénique...";
+
+    let hasText = false;
+    let hasMedia = false;
+
+    function processMedia(file) {
+
+      if (hasText || hasMedia) return;
+
+      const reader = new FileReader();
+
+      reader.onload = () => {
+
+        let mediaElement;
+
+        if (file.type.startsWith("image")) {
+
+          mediaElement = document.createElement("img");
+          mediaElement.src = reader.result;
+        }
+
+        else if (file.type.startsWith("audio")) {
+
+          mediaElement = document.createElement("audio");
+          mediaElement.src = reader.result;
+          mediaElement.controls = true;
+        }
+
+        if (!mediaElement) return;
+
+        proposalBubble.appendChild(mediaElement);
+
+        hasMedia = true;
+
+        uploadLabel.textContent = "📁";
+        uploadLabel.appendChild(fileInput);
+
+        proposalTextarea.remove();
+      };
+
+      reader.readAsDataURL(file);
+    }
+
+    proposalTextarea.addEventListener("input", () => {
+
+      const hasContent =
+        proposalTextarea.value.trim().length > 0;
+
+      if (hasContent && !hasMedia) {
+
+        hasText = true;
+        uploadLabel.style.visibility = "hidden";
+      }
+
+      else if (!hasMedia) {
+
+        hasText = false;
+        uploadLabel.style.visibility = "visible";
+      }
+    });
+
+    fileInput.onchange = e => {
+
+      const file = e.target.files[0];
+      if (!file) return;
+
+      processMedia(file);
+    };
+
+    proposalTextarea.addEventListener("paste", e => {
+
+      const items = e.clipboardData.items;
+
+      for (let item of items) {
+
+        if (
+          item.type.startsWith("image") ||
+          item.type.startsWith("audio")
+        ) {
+
+          const file = item.getAsFile();
+
+          processMedia(file);
+
+          e.preventDefault();
+          return;
+        }
+      }
+    });
+
+    deleteBtn.onclick = () => {
+
+      unwrapHighlight(el);
+
+      div.remove();
+
+      annotations = annotations.filter(a => a.div !== div);
+    };
+    const justificationBubble = document.createElement("div");
+    justificationBubble.className =
+      "justification-bubble";
+
+    const justificationTextarea =
+      document.createElement("textarea");
+
+    justificationTextarea.className =
+      "justification-textarea";
+
+    justificationTextarea.placeholder =
+      "Justification interprétative...";
+
+    justificationBubble.appendChild(
+      justificationTextarea
+    );
+
+    function activate() {
+
+      el.classList.add("linked-hover");
+      div.classList.add("linked-hover");
+    }
+
+    function deactivate() {
+
+      el.classList.remove("linked-hover");
+      div.classList.remove("linked-hover");
+    }
+
+    el.addEventListener("mouseenter", activate);
+    el.addEventListener("mouseleave", deactivate);
+
+    div.addEventListener("mouseenter", activate);
+    div.addEventListener("mouseleave", deactivate);
+
+    proposalTextarea.addEventListener("focus", activate);
+    proposalTextarea.addEventListener("blur", deactivate);
+
+    justificationTextarea.addEventListener(
+      "focus",
+      activate
+    );
+
+    justificationTextarea.addEventListener(
+      "blur",
+      deactivate
+    );
+
+    proposalBubble.appendChild(toolbar);
+    proposalBubble.appendChild(proposalTextarea);
+
+    div.appendChild(proposalBubble);
+    div.appendChild(justificationBubble);
+
+    const row = el.closest(".row");
+    const slot = row.querySelector(".comment-slot");
+
+    slot.appendChild(div);
+
+    annotations.push({ el, div });
+
+    return div;
+  }
+
+  function unwrapHighlight(el) {
+    const parent = el.parentNode;
+
+    while (el.firstChild) {
+      parent.insertBefore(el.firstChild, el);
+    }
+
+    parent.removeChild(el);
+  }
+
+
+
+const floatingBtn = document.getElementById("floatingHighlight");
+
+let currentSelectionRange = null;
+
+document.addEventListener("mouseup", () => {
+  const sel = window.getSelection();
+
+  if (sel.isCollapsed) {
+    floatingBtn.style.display = "none";
+    return;
+  }
+
+  const range = sel.getRangeAt(0);
+  const rect = range.getBoundingClientRect();
+
+  currentSelectionRange = range;
+
+  floatingBtn.style.top = (window.scrollY + rect.top - 40) + "px";
+  floatingBtn.style.left = (rect.left) + "px";
+  floatingBtn.style.display = "block";
+});
+
+floatingBtn.onclick = () => {
+
+  if (!currentSelectionRange) return;
+
+  const span = document.createElement("span");
+  span.className = "highlight";
+
+  currentSelectionRange.surroundContents(span);
+
+  createComment(span);
+
+  window.getSelection().removeAllRanges();
+  floatingBtn.style.display = "none";
+};
+</script>
+</body>
+</html>
