@@ -9,3 +9,6 @@
 ❌ - Faire en sorte que l'on puisse charger une image à la place d'un commentaire textuel (laisser le bouton 📂)
 ❌ - clic doit pour supprimer un commentaire au lieu de prendre de la place pour la nav bar ? mais chargement dossier ?
 ✅ - réessayer d'implémenter le mode focus : commentaire est hover = le texte associé s’illumine légèrement et les autres commentaires baissent en opacité
+
+Limitations :
+❌ - impossible de surligner sur deux répliques à la fois

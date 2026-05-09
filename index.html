@@ -241,7 +241,9 @@ input:focus {
 
   document.addEventListener("drop", e => {
     e.preventDefault();
-    loadMD(e.dataTransfer.files[0]);
+    const file = e.dataTransfer.files[0];
+    if (!file) return;
+    loadMD(file);
   });
   document.getElementById("fileInput")
     .addEventListener("change", e => {
@@ -254,6 +256,13 @@ input:focus {
   });
 
   function loadMD(file) {
+
+    if (!(file instanceof File)) {
+
+      console.error("Invalid file:", file);
+
+      return;
+    }
 
     const reader = new FileReader();
 
@@ -581,18 +590,6 @@ input:focus {
       return;
     }
 
-    const parentHighlight =
-      range.commonAncestorContainer
-        .parentElement
-        ?.closest(".highlight");
-
-    if (parentHighlight) {
-
-      highlightBtn.disabled = true;
-
-      return;
-    }
-
     currentSelectionRange = range;
 
     highlightBtn.disabled = false;
@@ -606,7 +603,12 @@ input:focus {
 
     span.className = "highlight";
 
-    currentSelectionRange.surroundContents(span);
+    const contents =
+      currentSelectionRange.extractContents();
+
+    span.appendChild(contents);
+
+    currentSelectionRange.insertNode(span);
 
     createComment(span);
 
