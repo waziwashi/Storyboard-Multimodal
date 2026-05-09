@@ -5,13 +5,22 @@
 <title>Storyboard Multimodal</title>
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <link rel="icon" type="image/png" href="icon.png">
+<link href="https://fonts.cdnfonts.com/css/open-dyslexic" rel="stylesheet">
 
 <style>
 body {
   margin: 0;
   height: 100vh;
   overflow: hidden;
-  font-family: Arial;
+  font-family: 'Open-Dyslexic', sans-serif;
+	font-style: normal;
+	font-weight: normal;
+}
+button,
+input,
+textarea,
+label {
+  font-family: inherit;
 }
 
 #container {
@@ -23,18 +32,12 @@ body {
 }
 #rows::before {
   content: "";
-
   position: absolute;
-
   top: 0;
   bottom: 0;
-
   left: 50%;
-
   width: 2px;
-
   background: #ddd;
-
   transform: translateX(-50%);
 }
 .row {
@@ -65,18 +68,22 @@ body {
   transition: 0.15s;
 }
 #highlightBtn:disabled {
-
   opacity: 0.3;
   cursor: default;
 }
 #highlightBtn:hover:not(:disabled) {
-
   transform: scale(1.03);
 }
 
 .highlight {
-  background: rgba(255, 230, 120, 0.45);
-  border-radius: 3px;
+  background:
+    linear-gradient(
+      transparent 35%,
+      rgba(0, 130, 255, 0.6) 35%
+    );
+  border-radius: 2px;
+
+  padding: 0 1px;
 }
 
 .comment {
@@ -88,11 +95,11 @@ body {
 
 .proposal-bubble {
   position: relative;
-  background: white;
+  background: #f1f0f0;
   border-radius: 16px 16px 16px 0;
-  box-shadow: 5px 5px 5px black;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.9);
+  margin-left: 12px;
   padding: 0;
-  border: 1px solid #ddd;
   overflow: hidden;
 }
 .proposal-bubble::after {
@@ -106,17 +113,18 @@ body {
   border-bottom: 10px solid transparent;
   border-right: 10px solid white;
 }
-
 .justification-bubble {
   position: relative;
-  background: #eef5ff;
+  background: #0082ff;
   border-radius: 16px 16px 0 16px;
-  box-shadow: 5px 5px 5px black;
-  padding: 12px;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.9);
+  padding: 12px 12px 0 12px;
   margin-left: 40px;
 }
 
 .comment-toolbar {
+  position: relative;
+  z-index: 5;
   opacity: 0;
   transition: opacity 0.2s;
 }
@@ -147,39 +155,59 @@ body {
 }
 
 .proposal-textarea,
-.justification-textarea {
-  min-height: 35px;
+.proposal-textarea::placeholder {
+  min-height: 38px;
+  color: black;
+}
+.justification-textarea,
+.justification-textarea::placeholder {
+  min-height: 38px;
+  color: white;
 }
 
 textarea:focus,
 button:focus,
 label:focus,
 input:focus {
-
   outline: none;
   box-shadow: none;
 }
 
+.dimmed-comment {
+  opacity: 0.45;
+  filter: blur(0.2px);
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.focus-active {
+  opacity: 1 !important;
+  transform: scale(1.01);
+  z-index: 2;
+}
+.linked-hover {
+  background:
+    linear-gradient(
+      transparent 35%,
+      rgba(0, 130, 255, 0.9) 35%
+    );
+  transition: 0.15s;
+}
+
 .comment img {
-
+  display: block;
   width: 100%;
-
   max-height: 120px;
-
   object-fit: cover;
-
   cursor: zoom-in;
-
   transition:
     max-height 0.25s ease,
     transform 0.25s ease;
 }
 .comment img:hover {
-
-  max-height: 600px;
-
   transform: scale(1.02);
-
+  max-height: 600px;
   z-index: 5;
 }
 
@@ -190,12 +218,6 @@ input:focus {
 
 .hidden-input {
   display: none;
-}
-
-.linked-hover {
-  background: rgba(255, 230, 120, 0.25);
-  transition: 0.15s;
-  background: #fff3cd;
 }
 </style>
 </head>
@@ -217,64 +239,88 @@ input:focus {
   const highlightBtn =
   document.getElementById("highlightBtn");
 
-document.addEventListener("drop", e => {
-  e.preventDefault();
-  loadMD(e.dataTransfer.files[0]);
-});
-document.getElementById("fileInput")
-  .addEventListener("change", e => {
-
-    const file = e.target.files[0];
-
-    if (!file) return;
-
-    loadMD(file);
-});
-
-function loadMD(file) {
-
-  const reader = new FileReader();
-
-  reader.onload = e => {
-
-    const md = e.target.result;
-
-    renderMD(md);
-  };
-  reader.readAsText(file);
-}
-
-marked.setOptions({
-  breaks: true
-});
-function renderMD(md) {
-
-  const rowsContainer = document.getElementById("rows");
-
-  rowsContainer.innerHTML = "";
-
-  const lines = md.split("\n");
-
-  lines.forEach((line, i) => {
-
-    const row = document.createElement("div");
-    row.className = "row";
-
-    const text = document.createElement("div");
-    text.className = "text";
-
-    text.innerHTML = marked.parseInline(line || " ");
-
-    const commentSlot = document.createElement("div");
-    commentSlot.className = "comment-slot";
-
-    row.appendChild(text);
-    row.appendChild(commentSlot);
-
-    rowsContainer.appendChild(row);
+  document.addEventListener("drop", e => {
+    e.preventDefault();
+    loadMD(e.dataTransfer.files[0]);
   });
-}
+  document.getElementById("fileInput")
+    .addEventListener("change", e => {
 
+      const file = e.target.files[0];
+
+      if (!file) return;
+
+      loadMD(file);
+  });
+
+  function loadMD(file) {
+
+    const reader = new FileReader();
+
+    reader.onload = e => {
+
+      const md = e.target.result;
+
+      renderMD(md);
+    };
+    reader.readAsText(file);
+  }
+
+  marked.setOptions({
+    breaks: true
+  });
+  function renderMD(md) {
+    const rowsContainer = document.getElementById("rows");
+    rowsContainer.innerHTML = "";
+    const lines = md.split("\n");
+    lines.forEach((line, i) => {
+
+      const row = document.createElement("div");
+      row.className = "row";
+
+      const text = document.createElement("div");
+      text.className = "text";
+
+      text.innerHTML = marked.parseInline(line || " ");
+
+      const commentSlot = document.createElement("div");
+      commentSlot.className = "comment-slot";
+
+      row.appendChild(text);
+      row.appendChild(commentSlot);
+
+      rowsContainer.appendChild(row);
+    });
+  }
+  function activateFocus(currentDiv) {
+
+    document
+      .querySelectorAll(".comment")
+      .forEach(comment => {
+
+        if (comment !== currentDiv) {
+
+          comment.classList.add("dimmed-comment");
+        }
+
+        else {
+
+          comment.classList.add("focus-active");
+        }
+      });
+  }
+  function deactivateFocus() {
+
+    document
+      .querySelectorAll(".comment")
+      .forEach(comment => {
+
+        comment.classList.remove(
+          "dimmed-comment",
+          "focus-active"
+        );
+      });
+  }
   function createComment(el) {
 
     const div = document.createElement("div");
@@ -304,7 +350,7 @@ function renderMD(md) {
 
     const proposalTextarea = document.createElement("textarea");
     proposalTextarea.className = "proposal-textarea";
-    proposalTextarea.placeholder = "Proposition scénique...";
+    proposalTextarea.placeholder = "Intention de mise en scène...";
 
     let hasText = false;
     let hasMedia = false;
@@ -433,15 +479,15 @@ function renderMD(md) {
     autoResizeTextarea(justificationTextarea);
 
     function activate() {
-
       el.classList.add("linked-hover");
-      div.classList.add("linked-hover");
+      div.classList.add("focus-active");
+      activateFocus(div);
     }
 
     function deactivate() {
-
       el.classList.remove("linked-hover");
-      div.classList.remove("linked-hover");
+      div.classList.remove("focus-active");
+      deactivateFocus();
     }
 
     el.addEventListener("mouseenter", activate);
@@ -569,20 +615,6 @@ function renderMD(md) {
     currentSelectionRange = null;
 
     highlightBtn.disabled = true;
-  };
-
-  floatingBtn.onclick = () => {
-
-    if (!currentSelectionRange) return;
-
-    const span = document.createElement("span");
-    span.className = "highlight";
-
-    currentSelectionRange.surroundContents(span);
-
-    createComment(span);
-
-    window.getSelection().removeAllRanges();
   };
 </script>
 </body>
