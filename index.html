@@ -45,6 +45,10 @@ label {
   grid-template-columns: 50% 50%;
   padding: 5px 10px;
 }
+.text {
+  text-align: justify;
+  padding-right: 5px;
+}
 
 #upload {
   position: sticky;
@@ -82,7 +86,6 @@ label {
       rgba(0, 130, 255, 0.6) 35%
     );
   border-radius: 2px;
-
   padding: 0 1px;
 }
 
@@ -234,7 +237,6 @@ input:focus {
 </div>
 
 <script>
-
   document.addEventListener("dragover", e => e.preventDefault());
   const highlightBtn =
   document.getElementById("highlightBtn");

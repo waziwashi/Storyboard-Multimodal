@@ -9,6 +9,11 @@
 ❌ - Faire en sorte que l'on puisse charger une image à la place d'un commentaire textuel (laisser le bouton 📂)
 ❌ - clic doit pour supprimer un commentaire au lieu de prendre de la place pour la nav bar ? mais chargement dossier ?
 ✅ - réessayer d'implémenter le mode focus : commentaire est hover = le texte associé s’illumine légèrement et les autres commentaires baissent en opacité
+❌ - comme certain ratio ne sont pas pratique pour voir dans la preview, faire en sorte qu'une fois l'img cliquée, elle apparaissent chargée dans un nouvel onglet comment dans "ouvrir l'image dans un nouvel onglet"
 
 Limitations :
 ❌ - impossible de surligner sur deux répliques à la fois
+❌ - bien demander aux élèves de référencer leurs sources img, vidéo ou audio
+
+À faire :
+- mieux commenter le css pour séparer le panneau gauche du panneau droit
