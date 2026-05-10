@@ -44,10 +44,24 @@ label {
   display: grid;
   grid-template-columns: 50% 50%;
   padding: 5px 10px;
+  align-items: flex-start;
 }
 .text {
   text-align: justify;
   padding-right: 5px;
+}
+.text h1,
+.text h2,
+.text h3 {
+  margin-top: 0.2em;
+  margin-bottom: 0.4em;
+  line-height: 1.2;
+}
+.text blockquote {
+  margin: 0.3em 0;
+  padding-left: 12px;
+  border-left: 4px solid #0082ff;
+  color: #444;
 }
 
 #upload {
@@ -292,7 +306,17 @@ input:focus {
       const text = document.createElement("div");
       text.className = "text";
 
-      text.innerHTML = marked.parseInline(line || " ");
+      text.innerHTML = marked.parse(line);
+
+      const onlyChild = text.children[0];
+      if (
+        onlyChild &&
+        onlyChild.tagName === "P" &&
+        text.children.length === 1
+      ) {
+
+        text.innerHTML = onlyChild.innerHTML;
+      }
 
       const commentSlot = document.createElement("div");
       commentSlot.className = "comment-slot";
