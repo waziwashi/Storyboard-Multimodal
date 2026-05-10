@@ -1,3 +1,7 @@
+### Lorenzaccio III, 3 - Alfred de Musset
+>La scène pivot de la pièce, où Lorenzo avoue à son ami républicain Philippe le projet de sa vie ; s'il s'est corrompu au dernier degré, c'est afin d'assassiner le tyran, le duc Alexandre de Médicis.
+___
+
 **PHILIPPE** - Eh bien, Lorenzo ?
 **LORENZO** - Ma jeunesse a été pure comme l'or. Pendant vingt ans de silence, la foudre s'est amoncelée dans ma poitrine ; et il faut que je sois réellement une étincelle du tonnerre, car tout à coup, une certaine nuit que j'étais assis dans les ruines du Colisée antique, je ne sais pourquoi je me levai ; je tendis vers le ciel mes bras trempés de rosée, et je jurai qu'un des tyrans de ma patrie mourrait de ma main. J'étais un étudiant paisible, je ne m'occupais alors que des arts et des sciences, et il m'est impossible de dire comment cet étrange serment s'est fait en moi. Peut-être est-ce là ce qu'on éprouve quand on devient amoureux.
 **PHILIPPE** - J'ai toujours eu confiance en toi, et cependant je crois rêver.
@@ -6,4 +10,4 @@
 **LORENZO** - J'ai voulu tuer Clément VII, je n'ai pu le faire, parce qu'on m'a banni de Rome avant le temps. J'ai recommencé mon ouvrage avec Alexandre. Je voulais agir seul, sans le secours d'aucun homme. Je travaillais pour l'humanité ; mais mon orgueil restait solitaire au milieu de tous mes rêves philanthropiques. Il fallait donc entamer par la ruse un combat singulier avec mon ennemi. Je ne voulais pas soulever les masses, ni conquérir la gloire bavarde d'un paralyptique comme Cicéron. Je voulais arriver à l'homme, me prendre corps à corps avec la tyrannie vivante, la tuer, porter mon épée sanglante sur la tribune, et laisser la fumée du sang d'Alexandre monter au nez des harangueurs, pour réchauffer leur cervelle ampoulée.
 **PHILIPPE** - Quelle tête de fer as-tu, ami ! quelle tête de fer !
 **LORENZO** - La tâche que je m'imposais était rude avec Alexandre. Florence était, comme aujourd'hui, noyée de vin et de sang. L'empereur et le pape avaient fait un duc d'un garçon de boucher. Pour plaire à mon cousin, il fallait arriver à lui, porté par les larmes des familles ; pour devenir son ami, et acquérir sa confiance, il fallait baiser sur ses lèvres épaisses tous les restes de ses orgies. J'étais pur comme un lis, et cependant je n'ai pas reculé devant cette tâche. Ce que je suis devenu à cause de cela, n'en parlons pas. Tu dois comprendre que j'ai souffert, et il y a des blessures dont on ne lève pas l'appareil impunément. Je suis devenu vicieux, lâche, un objet de honte et d'opprobre – qu'importe ? ce n'est pas de cela qu'il s'agit.
-**PHILIPPE** - Tu baisses la tête, tes yeux sont humides.****
+**PHILIPPE** - Tu baisses la tête, tes yeux sont humides.

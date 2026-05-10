@@ -1,3 +1,7 @@
+### Médée, v.1040-1076 - Euripide
+>La scène d'ultime délibération avant le meurtre de ses enfants.
+___
+
 **MÉDÉE** - Non ! Non ! Pourquoi vos yeux me regardent, enfants ?
 Pourquoi riez vous du tout dernier rire ?
 Hélas ! Que dois-je faire ? Mon cœur s'en est allé,

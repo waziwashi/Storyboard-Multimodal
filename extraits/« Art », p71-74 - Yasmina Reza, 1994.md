@@ -1,3 +1,5 @@
+### "Art", p71-74 - Yasmina Reza
+___
 
 **YVAN** Ah oui.
 J’ai pensé à toi aujourd’hui, au magasin on a reproduit cinq cents affiches d’un type qui a peint des fleurs blanches, complètement blanches, sur un fond blanc.
@@ -6,8 +8,7 @@ J’ai pensé à toi aujourd’hui, au magasin on a reproduit cinq cents affiche
 **MARC** Tu trouves que ce tableau n’est pas blanc, Yvan ?
 **YVAN** Pas tout à fait, non...
 **MARC** Ah bon. Et tu vois quoi comme couleur ?…
-**YVAN** Je vois des couleurs… Je vois du jaune, du gris, des lignes un
-peu ocre…
+**YVAN** Je vois des couleurs… Je vois du jaune, du gris, des lignes un peu ocre…
 **MARC** Et tu es ému par ces couleurs.
 **YVAN** Oui… Je suis ému par ces couleurs.
 **MARC** Yvan, tu n’as pas de consistance. Tu es un être hybride et flasque.
