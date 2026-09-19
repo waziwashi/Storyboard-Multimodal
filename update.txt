@@ -13,7 +13,7 @@
 
 Limitations :
 ❌ - impossible de surligner sur deux répliques à la fois
-❌ - bien demander aux élèves de référencer leurs sources img, vidéo ou audio
+❌ - bien demander aux élèves de référencer leurs sources img, vidéo ou audio (voire amener une banque audio adaptée à l'extrait étudié)
 
 À faire :
 - mieux commenter le css pour séparer le panneau gauche du panneau droit
