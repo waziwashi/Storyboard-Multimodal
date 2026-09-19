@@ -1,3 +1,5 @@
+Vidéo de Présentation : https://youtu.be/SkHkNDoHTTU
+
 ### Comment lancer le storyboard multimodal
 Si vous avez téléchargé le fichier, il suffit de l'ouvrir dans le navigateur de votre choix –avec une préférence pour ceux utilisant le moteur de rendu gecko, tel que firefox ou zen– vous arriverez sur la même page que le site. Par la suite il s'agit d'ouvrir un texte qui sera préalablement donné aux élèves, au format markdown (un format proche du .txt, mais avec une mise en forme), que l'on peut ouvrir simplement dans un bloc-notes ou une application comme Obsidian.
 *–pour des raisons que je ne détaillerais pas ici, la syntaxe d'un pdf ne s'adapte que difficilement à cet usage–*
