@@ -11,6 +11,7 @@
 ✅ - réessayer d'implémenter le mode focus : commentaire est hover = le texte associé s’illumine légèrement et les autres commentaires baissent en opacité
 ❌ - comme certain ratio ne sont pas pratique pour voir dans la preview, faire en sorte qu'une fois l'img cliquée, elle apparaissent chargée dans un nouvel onglet comment dans "ouvrir l'image dans un nouvel onglet"
 ❌ - Ajouter un moyen de signer de son nom à l'export du fichier
+❌ - Avant de charger un texte, mettre une img de template et un message pour le charger (Accessibilité)
 
 Limitations :
 ❌ - impossible de surligner sur deux répliques à la fois
